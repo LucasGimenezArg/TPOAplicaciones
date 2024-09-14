@@ -1,16 +1,15 @@
 package com.uade.tpo.ecommerce.controllers;
 
+import com.uade.tpo.ecommerce.model.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.uade.tpo.ecommerce.model.Usuario;
 import com.uade.tpo.ecommerce.model.UsuarioAdmin;
 import com.uade.tpo.ecommerce.model.UsuarioNormal;
-import com.uade.tpo.ecommerce.service.Logeado;
 import com.uade.tpo.ecommerce.service.UsuarioService;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -20,36 +19,39 @@ public class ControladorUsuario {
     private UsuarioService usuarioService;
 
     @PostMapping("/normal")
-    public UsuarioNormal registrarUsuarioNormal(@RequestParam String nombreUsuario,
-                                                @RequestParam String mail,
-                                                @RequestParam String contrasena,
-                                                @RequestParam String nombre,
-                                                @RequestParam String apellido,
-                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaNacimiento)
-    {
-        return usuarioService.crearCliente(nombreUsuario, mail, contrasena, nombre, apellido, fechaNacimiento);
+    public UsuarioNormal registrarUsuarioNormal(@RequestBody UsuarioNormal usuarioNormalObjeto) {
+        return usuarioService.crearCliente(
+                usuarioNormalObjeto.getNombreUsuario(),
+                usuarioNormalObjeto.getMail(),
+                usuarioNormalObjeto.getContrasena(),
+                usuarioNormalObjeto.getNombre(),
+                usuarioNormalObjeto.getApellido(),
+                usuarioNormalObjeto.getFechaNacimiento()
+        );
     }
 
     @PostMapping("/admin")
-    public UsuarioAdmin registrarAdministrador(@RequestParam String nombreUsuario,
-                                               @RequestParam String mail,
-                                               @RequestParam String contrasena,
-                                               @RequestParam String nombre,
-                                               @RequestParam String apellido,
-                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaNacimiento
-    ) {
-        return usuarioService.crearAdministrador(nombreUsuario, mail, contrasena, nombre, apellido, fechaNacimiento);
+    public UsuarioAdmin registrarAdministrador(@RequestBody UsuarioAdmin usuarioAdminObjeto) {
+        return usuarioService.crearAdministrador(
+                usuarioAdminObjeto.getNombreUsuario(),
+                usuarioAdminObjeto.getMail(),
+                usuarioAdminObjeto.getContrasena(),
+                usuarioAdminObjeto.getNombre(),
+                usuarioAdminObjeto.getApellido(),
+                usuarioAdminObjeto.getFechaNacimiento()
+        );
     }
 
-    @GetMapping("/{id}")
-    public static void logearse(String credencial, String contrasena){
+    @PostMapping("/login")
+    public ResponseEntity<Usuario> logearse(@RequestBody LoginRequest loginRequest) {
 
-        if (credencial.contains("@")){
-            Logeado.LogearMail( credencial,  contrasena);
-        }
-        else{
-            Logeado.LogearUsuario( credencial,  contrasena);
-        }
+        Usuario usuario = usuarioService.autenticarUsuario(loginRequest.getCredencial(), loginRequest.getContrasena());
 
+        if (usuario != null) {
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }
