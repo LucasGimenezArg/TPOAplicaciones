@@ -2,22 +2,25 @@ package com.uade.tpo.ecommerce.dto;
 
 import java.util.ArrayList;
 
-import com.uade.tpo.ecommerce.model.Product;
+import com.uade.tpo.ecommerce.model.Categoria;
+import com.uade.tpo.ecommerce.model.Producto;
 
-public class ProductDto {
+public class ProductoDto {
 	private Long id;
-	private String description;
+	private String descripcion;
 	private int stock;
 	private double precio;
+	private Categoria categoria;
 	private String informacion;
 	private ArrayList<String> direccionImagenes;
 	
-	public ProductDto(Long id, String description, int stock, double precio, String informacion,
+	public ProductoDto(Long id, String descripcion, int stock, double precio, Categoria categoria, String informacion,
 			ArrayList<String> direccionImagenes) {
 		this.id = id;
-		this.description = description;
+		this.descripcion = descripcion;
 		this.stock = stock;
 		this.precio = precio;
+		this.categoria = categoria;
 		this.informacion = informacion;
 		this.direccionImagenes = direccionImagenes;
 	}
@@ -30,12 +33,12 @@ public class ProductDto {
 		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public int getStock() {
@@ -52,6 +55,14 @@ public class ProductDto {
 
 	public void setPrecio(double precio) {
 		this.precio = precio;
+	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	public String getInformacion() {
@@ -70,7 +81,7 @@ public class ProductDto {
 		this.direccionImagenes = direccionImagenes;
 	}
 	
-	public Product toEntity() {
-		return new Product(this.id, this.description, this.stock, this.precio, this.informacion, this.direccionImagenes);
+	public Producto toEntity() {
+		return new Producto(this.id, this.descripcion, this.stock, this.precio, this.categoria, this.informacion, this.direccionImagenes);
 	}
 }

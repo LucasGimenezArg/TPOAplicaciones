@@ -1,4 +1,4 @@
-package com.uade.tpo.ecommerce.controller;
+package com.uade.tpo.ecommerce.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

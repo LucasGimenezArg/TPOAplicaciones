@@ -2,40 +2,32 @@ package com.uade.tpo.ecommerce.dto;
 
 import java.util.ArrayList;
 
-import com.uade.tpo.ecommerce.model.Product;
+import com.uade.tpo.ecommerce.model.Producto;
 
-public class ProductDto {
-	private Long id;
-	private String description;
+public class AltaProductoDto {
+	private String descripcion;
 	private int stock;
 	private double precio;
+	private Long categoriaId;
 	private String informacion;
 	private ArrayList<String> direccionImagenes;
 	
-	public ProductDto(Long id, String description, int stock, double precio, String informacion,
+	public AltaProductoDto(String descripcion, int stock, double precio, Long categoria, String informacion,
 			ArrayList<String> direccionImagenes) {
-		this.id = id;
-		this.description = description;
+		this.descripcion = descripcion;
 		this.stock = stock;
 		this.precio = precio;
+		this.categoriaId = categoria;
 		this.informacion = informacion;
 		this.direccionImagenes = direccionImagenes;
 	}
 
-	public Long getId() {
-		return id;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public int getStock() {
@@ -54,6 +46,14 @@ public class ProductDto {
 		this.precio = precio;
 	}
 
+	public Long getCategoriaId() {
+		return categoriaId;
+	}
+
+	public void setCategoriaId(Long categoriaId) {
+		this.categoriaId = categoriaId;
+	}
+
 	public String getInformacion() {
 		return informacion;
 	}
@@ -70,7 +70,8 @@ public class ProductDto {
 		this.direccionImagenes = direccionImagenes;
 	}
 	
-	public Product toEntity() {
-		return new Product(this.id, this.description, this.stock, this.precio, this.informacion, this.direccionImagenes);
+	public Producto toEntity() {
+		return new Producto(null, this.descripcion, this.stock, this.precio, null, this.informacion, this.direccionImagenes);
 	}
+
 }

@@ -26,11 +26,12 @@ public class ProductService {
 	
 	public ProductDto getProductById(Long id) throws Exception{
 		Product product = productRepository.findById(id).orElseThrow(() -> new Exception("Error buscando producto por id"));
-		return new ProductDto(product.getId(), product.getDesc(), product.getStock(), product.getPrecio(), product.getInformacion(), product.getDireccionImagenes());
+		return product.toDto();
 	}
 
 	public ProductDto addProduct(ProductDto productDto) {
-		Product product = productRepository.add(productDto);
-		return new ProductDto(product.getId(), product.getDesc(), product.getStock(), product.getPrecio(), product.getInformacion(), product.getDireccionImagenes());
+		Product product = productDto.toEntity();
+		productRepository.save(product);
+		return product.toDto();
 	}
 }
