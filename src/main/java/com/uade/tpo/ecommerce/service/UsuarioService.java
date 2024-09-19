@@ -1,6 +1,10 @@
 package com.uade.tpo.ecommerce.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.uade.tpo.ecommerce.dto.AutenticacionDto;
+import com.uade.tpo.ecommerce.security.JwtService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.ecommerce.model.Usuario;
@@ -12,21 +16,54 @@ import java.util.Date;
 
 @Service
 public class UsuarioService {
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public UsuarioNormal crearCliente(String nombreUsuario, String mail, String contrasena,
-                                      String nombre, String apellido, Date fechaNacimiento
-    ) {
-        UsuarioNormal cliente = new UsuarioNormal(nombreUsuario, mail, contrasena, nombre, apellido, fechaNacimiento);
-        return (UsuarioNormal) usuarioRepository.save(cliente); // Aquí se guarda en la base de datos
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
-    public UsuarioAdmin crearAdministrador(String nombreUsuario, String mail, String contrasena,
-                                           String nombre, String apellido, Date fechaNacimiento
-    ) {
-        UsuarioAdmin administrador = new UsuarioAdmin(nombreUsuario, mail, contrasena, nombre, apellido, fechaNacimiento);
-        return (UsuarioAdmin) usuarioRepository.save(administrador); // Aquí se guarda en la base de datos
+    private AutenticacionDto autenticar(Usuario usuario) {
+        var jwtToken = jwtService.generateToken(usuario);
+        return new AutenticacionDto(jwtToken);
     }
+
+    //Crea usuario normal
+
+    public AutenticacionDto crearCliente(String nombreUsuario, String mail, String contrasena, String nombre, String apellido, Date fechaNacimiento) {
+
+        UsuarioNormal cliente = new UsuarioNormal(nombreUsuario, mail, passwordEncoder.encode(contrasena), nombre, apellido, fechaNacimiento);
+
+        usuarioRepository.save(cliente); //guarda en la base de datos
+
+        return autenticar(cliente);
+    }
+
+    //Crea usuario admin
+
+    public AutenticacionDto crearAdministrador(String nombreUsuario, String mail, String contrasena, String nombre, String apellido, Date fechaNacimiento) {
+
+        UsuarioAdmin administrador = new UsuarioAdmin(nombreUsuario, mail, passwordEncoder.encode(contrasena), nombre, apellido, fechaNacimiento);
+
+        usuarioRepository.save(administrador); //guarda en la base de datos
+
+        return autenticar(administrador);
+    }
+
+    //parte login
+
+    public AutenticacionDto autenticarUsuario(String credencial, String contrasena) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credencial, contrasena));
+
+        Usuario usuario = usuarioRepository.findByNombreUsuario(credencial);
+        return autenticar(usuario);
+    }
+
 }
+
+
