@@ -69,12 +69,12 @@ public class CarritoServiceTest {
     @Test
     public void shouldAddNewItem() {
         Producto producto = buildRandomProduct();
-        ItemCarritoDto inputCarritoDto = new ItemCarritoDto(producto.toDto(), 10);
-        when(carritoRepository.findByUsuarioAndProducto_IdAndOrdenIsNull(eq(USUARIO), eq(inputCarritoDto.getProducto().getId())))
+        when(carritoRepository.findByUsuarioAndProducto_IdAndOrdenIsNull(eq(USUARIO), eq(producto.getId())))
                 .thenReturn(Optional.empty());
         when(productoRepository.findById(producto.getId())).thenReturn(Optional.of(producto));
+        when(carritoRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
-        carritoService.addOrUpdate(inputCarritoDto, USUARIO);
+        carritoService.addOrUpdate(producto.getId(), 10, USUARIO);
 
         ArgumentCaptor<ItemCarrito> itemCarritoArgumentCaptor = ArgumentCaptor.forClass(ItemCarrito.class);
         verify(carritoRepository).save(itemCarritoArgumentCaptor.capture());
@@ -82,18 +82,18 @@ public class CarritoServiceTest {
         assertNotNull(savedItem);
         assertEquals(producto.getId(), savedItem.getProducto().getId());
         assertEquals(USUARIO.getId(), savedItem.getUsuario().getId());
-        assertEquals(inputCarritoDto.getCantidad(), savedItem.getCantidad());
+        assertEquals(10, savedItem.getCantidad());
     }
 
     @Test
     public void shouldUpdateExistingItem() {
         Producto producto = buildRandomProduct();
-        ItemCarritoDto inputCarritoDto = new ItemCarritoDto(producto.toDto(), 50);
         ItemCarrito expectedItemCarrito = new ItemCarrito(producto, 10, USUARIO);
-        when(carritoRepository.findByUsuarioAndProducto_IdAndOrdenIsNull(eq(USUARIO), eq(inputCarritoDto.getProducto().getId())))
+        when(carritoRepository.findByUsuarioAndProducto_IdAndOrdenIsNull(eq(USUARIO), eq(producto.getId())))
                 .thenReturn(Optional.of(expectedItemCarrito));
+        when(carritoRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
-        carritoService.addOrUpdate(inputCarritoDto, USUARIO);
+        carritoService.addOrUpdate(producto.getId(), 50, USUARIO);
 
         verify(productoRepository, times(0)).findById(any());
         ArgumentCaptor<ItemCarrito> itemCarritoArgumentCaptor = ArgumentCaptor.forClass(ItemCarrito.class);
@@ -102,7 +102,7 @@ public class CarritoServiceTest {
         assertNotNull(savedItem);
         assertEquals(producto.getId(), savedItem.getProducto().getId());
         assertEquals(USUARIO.getId(), savedItem.getUsuario().getId());
-        assertEquals(inputCarritoDto.getCantidad(), savedItem.getCantidad());
+        assertEquals(50, savedItem.getCantidad());
     }
 
     @Test
@@ -111,8 +111,9 @@ public class CarritoServiceTest {
                 .thenReturn(Optional.empty());
         when(productoRepository.findById(any())).thenReturn(Optional.empty());
 
+        Producto producto = buildRandomProduct();
         assertThrows(IllegalArgumentException.class,
-                () -> carritoService.addOrUpdate(new ItemCarritoDto(buildRandomProduct().toDto(), 10), USUARIO));
+                () -> carritoService.addOrUpdate(producto.getId(), 10, USUARIO));
     }
 
     @Test
@@ -152,13 +153,14 @@ public class CarritoServiceTest {
                 .orElse(-1D);
         when(carritoRepository.findAllByUsuarioAndOrdenIsNull(eq(USUARIO))).thenReturn(expectedItems);
 
-        OrdenDto result = carritoService.checkout(USUARIO);
+        Optional<OrdenDto> result = carritoService.checkout(USUARIO);
 
         verify(ordenRepository).save(any());
-        assertEquals(LocalDate.now(), result.getFecha());
-        assertTrue(result.getTotal() > 0);
-        assertEquals(expectedTotal, result.getTotal());
-        assertEquals(expectedItems.size(), result.getItems().size());
+        assertFalse(result.isEmpty());
+        assertEquals(LocalDate.now(), result.get().getFecha());
+        assertTrue(result.get().getTotal() > 0);
+        assertEquals(expectedTotal, result.get().getTotal());
+        assertEquals(expectedItems.size(), result.get().getItems().size());
     }
 
     private Producto buildRandomProduct() {
