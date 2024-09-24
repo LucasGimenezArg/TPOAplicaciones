@@ -40,6 +40,13 @@ public class ControladorProducto {
 
 		return ResponseEntity.ok(listaProductos);
 	}
+
+	@GetMapping("/destacados") ResponseEntity<ListaProductosDto> getProductsTopTen() throws Exception{
+
+		ListaProductosDto listaProductos = productoService.getProductsTopTen();
+
+		return ResponseEntity.ok(listaProductos);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductoDto> getProduct(@PathVariable Long id) throws Exception {

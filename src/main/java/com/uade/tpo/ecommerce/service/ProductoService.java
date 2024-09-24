@@ -43,6 +43,11 @@ public class ProductoService {
 		List<Producto> productos = productoRepository.findByCategoria(cat.get());
 		return new ListaProductosDto(productos);
 	}
+
+	public ListaProductosDto getProductsTopTen() throws Exception{
+		List<Producto> productos = productoRepository.findTopTen();
+		return new ListaProductosDto(productos);
+	}
 	
 	public ProductoDto getProductById(Long id) throws Exception{
 		Producto producto = productoRepository.findById(id).orElseThrow(() -> new Exception("Error buscando producto por id"));
