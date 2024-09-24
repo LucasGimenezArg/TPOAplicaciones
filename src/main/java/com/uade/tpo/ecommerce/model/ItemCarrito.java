@@ -71,4 +71,12 @@ public class ItemCarrito {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
 }
