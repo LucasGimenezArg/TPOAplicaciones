@@ -22,22 +22,22 @@ public class ControladorCarrito {
         this.carritoService = carritoService;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public Collection<ItemCarritoDto> list(@AuthenticationPrincipal Usuario usuario) {
         return carritoService.getAll(usuario);
     }
 
-    @PostMapping("/producto")
+    @PostMapping("/add")
     public void addProduct(ItemCarritoDto cartItem, @AuthenticationPrincipal Usuario usuario) {
         carritoService.addOrUpdate(cartItem, usuario);
     }
 
-    @DeleteMapping("/producto")
+    @DeleteMapping("/remove")
     public void removeProduct(Long productoId, @AuthenticationPrincipal Usuario usuario) {
         carritoService.remove(productoId, usuario);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/clear")
     public void clear(@AuthenticationPrincipal Usuario usuario) {
         carritoService.clear(usuario);
     }
