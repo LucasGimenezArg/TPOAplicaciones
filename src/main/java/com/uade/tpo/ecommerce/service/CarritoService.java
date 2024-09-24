@@ -56,6 +56,7 @@ public class CarritoService {
                 });
     }
 
+    @Transactional
     public void clear(Usuario usuario) {
         carritoRepository.deleteAllByUsuarioAndOrdenIsNull(usuario);
     }
