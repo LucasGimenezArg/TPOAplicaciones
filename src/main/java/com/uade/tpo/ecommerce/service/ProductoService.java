@@ -33,6 +33,16 @@ public class ProductoService {
 			List<Producto> productos = productoRepository.findAll();
 			return new ListaProductosDto(productos);
 	}
+
+	public ListaProductosDto getProductsListFilterCategory(Long categoriaId) throws Exception{
+		Optional<Categoria> cat = categoriaRepository.findById(categoriaId);
+		if(!cat.isPresent()) {
+			throw new RuntimeException("No existe categoria con el ID:" + categoriaId);
+		}
+
+		List<Producto> productos = productoRepository.findByCategoria(cat.get());
+		return new ListaProductosDto(productos);
+	}
 	
 	public ProductoDto getProductById(Long id) throws Exception{
 		Producto producto = productoRepository.findById(id).orElseThrow(() -> new Exception("Error buscando producto por id"));

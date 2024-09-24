@@ -33,6 +33,13 @@ public class ControladorProducto {
 		
 		return ResponseEntity.ok(listaProductos);
 	}
+
+	@GetMapping("/list/{categoria}") ResponseEntity<ListaProductosDto> getProductsListFilterCategory(@PathVariable Long categoria) throws Exception{
+
+		ListaProductosDto listaProductos = productoService.getProductsListFilterCategory(categoria);
+
+		return ResponseEntity.ok(listaProductos);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductoDto> getProduct(@PathVariable Long id) throws Exception {
