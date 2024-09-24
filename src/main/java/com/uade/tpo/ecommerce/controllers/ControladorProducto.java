@@ -1,5 +1,6 @@
 package com.uade.tpo.ecommerce.controllers;
 
+import com.uade.tpo.ecommerce.model.Categoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,12 @@ public class ControladorProducto {
 		}catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
-       
     }
+
+	@PostMapping("/categoria/add")
+	public ResponseEntity<?> addCategoria(@RequestBody Categoria categoria) {
+		return ResponseEntity.ok(productoService.addCategoria(categoria));
+	}
+
+
 }

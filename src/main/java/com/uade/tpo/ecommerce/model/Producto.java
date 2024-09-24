@@ -19,9 +19,9 @@ public class Producto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String descripcion;
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private int stock;
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private double precio;
 	@ManyToOne
 	@JoinColumn(name = "categoria_id", nullable = false)

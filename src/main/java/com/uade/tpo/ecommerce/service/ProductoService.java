@@ -3,6 +3,7 @@ package com.uade.tpo.ecommerce.service;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ public class ProductoService {
 		return producto.toDto();
 	}
 
+	@Transactional
 	public ProductoDto addProduct(AltaProductoDto productoAlta) {
 		if(productoAlta.getDescripcion().length() > MAX_DESC_LENGTH) {
 			throw new RuntimeException("La descripcion del producto no puede contener mas de " + MAX_DESC_LENGTH + " caracteres");
@@ -56,5 +58,9 @@ public class ProductoService {
 		producto.setCategoria(cat.get());
 		productoRepository.save(producto);  
 		return producto.toDto();
+	}
+
+	public Categoria addCategoria(Categoria categoria) {
+		return categoriaRepository.save(categoria);
 	}
 }
