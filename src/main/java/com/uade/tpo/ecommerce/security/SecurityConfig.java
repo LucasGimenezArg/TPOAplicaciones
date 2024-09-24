@@ -28,13 +28,14 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(req -> req.requestMatchers("/api/usuario/normal").permitAll()
                                                 .requestMatchers("/api/usuario/login").permitAll()
                                                 .requestMatchers("/api/usuario/admin").hasAnyAuthority(Usuario.ROL_ADMIN)
-                                                .requestMatchers("/api/producto").hasAnyAuthority(Usuario.ROL_ADMIN, Usuario.ROL_NORMAL)
+                                                .requestMatchers("/api/producto/**").hasAnyAuthority(Usuario.ROL_ADMIN, Usuario.ROL_NORMAL)
+                                                .requestMatchers("/api/carrito/**").hasAnyAuthority(Usuario.ROL_ADMIN, Usuario.ROL_NORMAL)
+                                                .requestMatchers("/error").anonymous()
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
                 return http.build();
         }
 

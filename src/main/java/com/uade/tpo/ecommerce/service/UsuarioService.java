@@ -13,6 +13,7 @@ import com.uade.tpo.ecommerce.model.UsuarioNormal;
 import com.uade.tpo.ecommerce.repository.UsuarioRepository;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -60,7 +61,8 @@ public class UsuarioService {
     public AutenticacionDto autenticarUsuario(String credencial, String contrasena) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credencial, contrasena));
 
-        Usuario usuario = usuarioRepository.findByNombreUsuario(credencial);
+        Usuario usuario = Optional.ofNullable(usuarioRepository.findByNombreUsuario(credencial))
+                .orElseGet(() -> usuarioRepository.findByMail(credencial));
         return autenticar(usuario);
     }
 
