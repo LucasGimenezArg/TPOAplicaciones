@@ -1,12 +1,6 @@
 package com.uade.tpo.ecommerce.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -20,6 +14,9 @@ public class Orden {
     @OneToMany
     @JoinColumn(name = "orden_id", referencedColumnName = "id")
     private Collection<ItemCarrito> items;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     public Orden() {}
     public Orden(LocalDate fecha, Collection<ItemCarrito> items) {
@@ -49,5 +46,13 @@ public class Orden {
 
     public void setItems(Collection<ItemCarrito> items) {
         this.items = items;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
