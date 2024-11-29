@@ -75,6 +75,39 @@ public class ProductoService {
 		return producto.toDto();
 	}
 
+	@Transactional
+	public ProductoDto updateProduct(Long id, AltaProductoDto productoAlta) {
+		if(productoAlta.getDescripcion().length() > MAX_DESC_LENGTH) {
+			throw new RuntimeException("La descripcion del producto no puede contener mas de " + MAX_DESC_LENGTH + " caracteres");
+		}
+		if(productoAlta.getInformacion().length() > MAX_INFO_LENGTH) {
+			throw new RuntimeException("La informacion del producto no puede contener mas de " + MAX_INFO_LENGTH + " caracteres");
+		}
+
+		Producto producto = productoRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe producto con el ID:" + id));
+		producto.setDescripcion(productoAlta.getDescripcion());
+		producto.setInformacion(productoAlta.getInformacion());
+		producto.setPrecio(productoAlta.getPrecio());
+		producto.setStock(productoAlta.getStock());
+		Optional<Categoria> cat = categoriaRepository.findById(productoAlta.getCategoriaId());
+
+		if(!cat.isPresent()) {
+			throw new RuntimeException("No existe categoria con el ID:" + productoAlta.getCategoriaId());
+		}
+
+		producto.setCategoria(cat.get());
+		productoRepository.save(producto);
+		return producto.toDto();
+	}
+
+	public void deleteProduct(Long id) {
+		productoRepository.deleteById(id);
+	}
+
+	public List<Categoria> getCategorias() throws Exception{
+		return categoriaRepository.findAll();
+	}
+
 	public Categoria addCategoria(Categoria categoria) {
 		return categoriaRepository.save(categoria);
 	}

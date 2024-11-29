@@ -1,6 +1,7 @@
 package com.uade.tpo.ecommerce.service;
 
 import com.uade.tpo.ecommerce.dto.AutenticacionDto;
+import com.uade.tpo.ecommerce.dto.UsuarioAuthDto;
 import com.uade.tpo.ecommerce.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +32,7 @@ public class UsuarioService {
 
     private AutenticacionDto autenticar(Usuario usuario) {
         var jwtToken = jwtService.generateToken(usuario);
-        return new AutenticacionDto(jwtToken);
+        return new AutenticacionDto(jwtToken, new UsuarioAuthDto(usuario));
     }
 
     //Crea usuario normal
