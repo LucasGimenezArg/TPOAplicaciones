@@ -39,6 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/producto/add").hasAnyAuthority(Usuario.ROL_ADMIN)
                                 .requestMatchers("/api/producto/categoria/add").hasAnyAuthority(Usuario.ROL_ADMIN)
                                 .requestMatchers("/api/carrito/**").hasAnyAuthority(Usuario.ROL_ADMIN, Usuario.ROL_NORMAL)
+                                .requestMatchers("/api/checkout/**").hasAnyAuthority(Usuario.ROL_ADMIN, Usuario.ROL_NORMAL)
                                 .requestMatchers("/error").anonymous()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().permitAll()
