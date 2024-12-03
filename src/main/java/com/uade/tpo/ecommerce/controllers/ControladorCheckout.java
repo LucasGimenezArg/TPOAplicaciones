@@ -1,6 +1,7 @@
 package com.uade.tpo.ecommerce.controllers;
 
 import com.uade.tpo.ecommerce.dto.OrdenDto;
+import com.uade.tpo.ecommerce.dto.PageDto;
 import com.uade.tpo.ecommerce.model.Usuario;
 import com.uade.tpo.ecommerce.service.CarritoService;
 import com.uade.tpo.ecommerce.service.OrdenService;
@@ -29,9 +30,9 @@ public class ControladorCheckout {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrdenDto>> getHistory(@AuthenticationPrincipal Usuario usuario,
-                                                     @RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<PageDto<OrdenDto>> getHistory(@AuthenticationPrincipal Usuario usuario,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size) {
         try {
             if (page < 0 || size < 1) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

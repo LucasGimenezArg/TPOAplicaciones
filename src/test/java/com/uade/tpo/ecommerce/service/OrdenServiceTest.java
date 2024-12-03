@@ -1,6 +1,7 @@
 package com.uade.tpo.ecommerce.service;
 
 import com.uade.tpo.ecommerce.dto.OrdenDto;
+import com.uade.tpo.ecommerce.dto.PageDto;
 import com.uade.tpo.ecommerce.model.ItemCarrito;
 import com.uade.tpo.ecommerce.model.Orden;
 import com.uade.tpo.ecommerce.repository.CarritoRepository;
@@ -8,6 +9,8 @@ import com.uade.tpo.ecommerce.repository.OrdenRepository;
 import com.uade.tpo.ecommerce.repository.ProductoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -43,11 +46,12 @@ public class OrdenServiceTest {
 
     @Test
     public void shouldGetPreviousCheckouts() {
-        when(ordenRepository.findAllByUsuario(any(), any())).thenReturn(List.of(new Orden(USUARIO_NORMAL, LocalDateTime.now(), List.of())));
-        List<OrdenDto> pastOrdenes = ordenService.getPastOrdenes(USUARIO_NORMAL, 0, 10);
+        PageImpl<Orden> page = new PageImpl<>(List.of(new Orden(USUARIO_NORMAL, LocalDateTime.now(), List.of())));
+        when(ordenRepository.findAllByUsuario(any(), any())).thenReturn(page);
+        PageDto<OrdenDto> pastOrdenes = ordenService.getPastOrdenes(USUARIO_NORMAL, 0, 10);
         verify(ordenRepository).findAllByUsuario(eq(USUARIO_NORMAL), eq(PageRequest.of(0, 10, Sort.by("fecha").descending())));
         assertNotNull(pastOrdenes);
-        assertFalse(pastOrdenes.isEmpty());
+        assertFalse(pastOrdenes.getItems().isEmpty());
     }
 
     @Test

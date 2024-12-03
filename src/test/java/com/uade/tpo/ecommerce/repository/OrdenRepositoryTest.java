@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
@@ -63,13 +64,13 @@ public class OrdenRepositoryTest {
 
     @Test
     public void shouldGetPaginatedOrders() {
-        List<Orden> page1 = ordenRepository.findAllByUsuario(USUARIO_NORMAL, PageRequest.of(0, TOTAL_ORDERS / 2));
-        List<Orden> page2 = ordenRepository.findAllByUsuario(USUARIO_NORMAL, PageRequest.of(1, TOTAL_ORDERS / 2));
+        Page<Orden> page1 = ordenRepository.findAllByUsuario(USUARIO_NORMAL, PageRequest.of(0, TOTAL_ORDERS / 2));
+        Page<Orden> page2 = ordenRepository.findAllByUsuario(USUARIO_NORMAL, PageRequest.of(1, TOTAL_ORDERS / 2));
         assertNotNull(page1);
         assertNotNull(page2);
         assertFalse(page1.isEmpty());
         assertFalse(page2.isEmpty());
-        assertEquals(TOTAL_ORDERS, page1.size() + page2.size());
+        assertEquals(TOTAL_ORDERS, page1.getContent().size() + page2.getContent().size());
         assertEquals(TOTAL_ORDERS, Stream.concat(page1.stream(), page2.stream()).distinct().count());
     }
 }
