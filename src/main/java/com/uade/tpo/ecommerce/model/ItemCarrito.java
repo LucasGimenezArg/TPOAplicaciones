@@ -37,7 +37,7 @@ public class ItemCarrito {
     }
 
     public ItemCarritoDto toDto() {
-        return new ItemCarritoDto(producto.toDto(), cantidad);
+        return new ItemCarritoDto(id, producto.toDto(), cantidad);
     }
 
     public Long getId() {

@@ -1,21 +1,25 @@
 package com.uade.tpo.ecommerce.dto;
 
-import com.uade.tpo.ecommerce.model.Producto;
-
 public class ItemCarritoDto {
+    private final Long id;
     private final ProductoDto producto;
-    private final int cantidad;
+    private final Integer cantidad;
 
-    public ItemCarritoDto(ProductoDto producto, int cantidad) {
+    public ItemCarritoDto(Long id, ProductoDto producto, Integer cantidad) {
+        this.id = id;
         this.producto = producto;
         this.cantidad = cantidad;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public ProductoDto getProducto() {
         return producto;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 }
