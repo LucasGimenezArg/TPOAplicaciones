@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -56,6 +57,7 @@ public class CarritoRepositoryTest {
 
     @AfterEach
     public void cleanup() {
+        carritoRepository.deleteAll();
         usuarioRepository.deleteAll();
         productoRepository.deleteAll();
         categoriaRepository.deleteAll();
@@ -67,7 +69,7 @@ public class CarritoRepositoryTest {
         ItemCarrito itemCarrito2 = new ItemCarrito(producto2, 5, usuario);
         carritoRepository.save(itemCarrito1);
         carritoRepository.save(itemCarrito2);
-        Orden orden = new Orden(LocalDate.now(), List.of(itemCarrito1));
+        Orden orden = new Orden(usuario, LocalDateTime.now(), List.of(itemCarrito1));
         itemCarrito1.setOrden(orden);
         ordenRepository.save(orden);
 
@@ -83,7 +85,7 @@ public class CarritoRepositoryTest {
         ItemCarrito itemCarrito2 = new ItemCarrito(producto2, 5, usuario);
         carritoRepository.save(itemCarrito1);
         carritoRepository.save(itemCarrito2);
-        Orden orden = new Orden(LocalDate.now(), List.of(itemCarrito1));
+        Orden orden = new Orden(usuario, LocalDateTime.now(), List.of(itemCarrito1));
         itemCarrito1.setOrden(orden);
         ordenRepository.save(orden);
 
@@ -98,7 +100,7 @@ public class CarritoRepositoryTest {
         ItemCarrito itemCarrito2 = new ItemCarrito(producto2, 5, usuario);
         carritoRepository.save(itemCarrito1);
         carritoRepository.save(itemCarrito2);
-        Orden orden = new Orden(LocalDate.now(), List.of(itemCarrito1));
+        Orden orden = new Orden(usuario, LocalDateTime.now(), List.of(itemCarrito1));
         itemCarrito1.setOrden(orden);
         ordenRepository.save(orden);
 

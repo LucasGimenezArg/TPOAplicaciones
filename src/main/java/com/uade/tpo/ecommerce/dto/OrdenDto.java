@@ -3,15 +3,16 @@ package com.uade.tpo.ecommerce.dto;
 import com.uade.tpo.ecommerce.model.ItemCarrito;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class OrdenDto {
     private final Long id;
-    private final LocalDate fecha;
+    private final LocalDateTime fecha;
     private final Collection<ItemCarritoDto> items;
     private final double total;
 
-    public OrdenDto(Long id, LocalDate fecha, Collection<ItemCarritoDto> items, double total) {
+    public OrdenDto(Long id, LocalDateTime fecha, Collection<ItemCarritoDto> items, double total) {
         this.id = id;
         this.fecha = fecha;
         this.items = items;
@@ -22,7 +23,7 @@ public class OrdenDto {
         return id;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
