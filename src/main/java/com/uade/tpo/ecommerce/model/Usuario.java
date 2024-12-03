@@ -19,6 +19,7 @@ public abstract class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false, unique = true)
     private String nombreUsuario;
     @Column(nullable = false, unique = true)
     private String mail;
